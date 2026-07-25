@@ -23,7 +23,7 @@ android {
         applicationId = "com.android.swingmusic"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = project.findProperty("versionCode")?.toString()?.toInt() ?: 1
+        versionCode = project.findProperty("versionCode")?.toString()?.toInt() ?: 2
         versionName = project.findProperty("versionName")?.toString() ?: "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
