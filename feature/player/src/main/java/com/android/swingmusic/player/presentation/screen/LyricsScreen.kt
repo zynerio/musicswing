@@ -1,6 +1,7 @@
 package com.android.swingmusic.player.presentation.screen
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -11,8 +12,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,9 +59,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
@@ -195,7 +201,7 @@ private fun LyricsOverlayContent(
             progress = { progress },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(2.dp),
+                .height(1.dp),
             color = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.outlineVariant,
             gapSize = 0.dp,
@@ -395,6 +401,7 @@ private fun LyricsBody(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SyncedLyricsList(
     state: LyricsUiState,
@@ -402,6 +409,8 @@ private fun SyncedLyricsList(
     onUserScrolled: (Boolean) -> Unit
 ) {
     val listState = rememberLazyListState()
+    val clipboard = LocalClipboardManager.current
+    val context = LocalContext.current
 
     LaunchedEffect(listState.isScrollInProgress) {
         if (listState.isScrollInProgress) onUserScrolled(true)
@@ -439,12 +448,21 @@ private fun SyncedLyricsList(
             val distance = if (current < 0) Int.MAX_VALUE else abs(index - current)
             val isPast = current >= 0 && index < current
 
+            // Per-line scaling (active line larger than neighbours). Disabled for now —
+            // all lines render at a uniform size. Keep for a future "animated lyrics" setting.
+            /*
             val targetScale = when {
                 isActive -> 1F
                 distance == 1 -> 0.72F
                 distance == 2 -> 0.62F
                 else -> 0.56F
             }
+            val animatedScale by animateFloatAsState(
+                targetValue = targetScale,
+                animationSpec = tween(durationMillis = 450, easing = FastOutSlowInEasing),
+                label = "lyricScale"
+            )
+            */
             val targetAlpha = when {
                 isActive -> 1F
                 isPast -> 0.35F
@@ -453,11 +471,6 @@ private fun SyncedLyricsList(
                 else -> 0.4F
             }
 
-            val animatedScale by animateFloatAsState(
-                targetValue = targetScale,
-                animationSpec = tween(durationMillis = 450, easing = FastOutSlowInEasing),
-                label = "lyricScale"
-            )
             val animatedColor by animateColorAsState(
                 targetValue = MaterialTheme.colorScheme.onSurface.copy(alpha = targetAlpha),
                 animationSpec = tween(durationMillis = 450, easing = FastOutSlowInEasing),
@@ -467,22 +480,33 @@ private fun SyncedLyricsList(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onSeek(line.time) }
-                    .padding(horizontal = 24.dp, vertical = 4.dp)
+                    .combinedClickable(
+                        onClick = { onSeek(line.time) },
+                        onLongClick = {
+                            if (line.text.isNotBlank()) {
+                                clipboard.setText(AnnotatedString(line.text.trim()))
+                                Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    )
+                    .padding(horizontal = 24.dp, vertical = 3.dp)
             ) {
                 Text(
                     text = line.text.ifBlank { "♪" },
-                    fontSize = 32.sp,
-                    lineHeight = 40.sp,
+                    fontSize = 26.sp,
+                    lineHeight = 36.sp,
                     fontWeight = if (isActive) FontWeight.Bold else FontWeight.SemiBold,
                     color = animatedColor,
+                    textAlign = TextAlign.Start,
                     modifier = Modifier
                         .fillMaxWidth()
+                        /*
                         .graphicsLayer {
                             scaleX = animatedScale
                             scaleY = animatedScale
                             transformOrigin = TransformOrigin(0F, 0.5F)
                         }
+                        */
                 )
             }
         }
@@ -501,29 +525,51 @@ private fun SyncedLyricsList(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun UnsyncedLyricsList(
-    state: com.android.swingmusic.player.presentation.state.LyricsUiState
+    state: LyricsUiState
 ) {
+    val clipboard = LocalClipboardManager.current
+    val context = LocalContext.current
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 32.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        contentPadding = PaddingValues(vertical = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
         items(state.lines) { line ->
-            Text(
-                text = line.text.ifBlank { " " },
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .combinedClickable(
+                        onClick = { },
+                        onLongClick = {
+                            if (line.text.isNotBlank()) {
+                                clipboard.setText(AnnotatedString(line.text.trim()))
+                                Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    )
+                    .padding(horizontal = 24.dp, vertical = 3.dp)
+            ) {
+                Text(
+                    text = line.text.ifBlank { "♪" },
+                    fontSize = 26.sp,
+                    lineHeight = 32.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
         if (state.copyright.isNotBlank()) {
             item {
                 Text(
                     text = state.copyright,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5F)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5F),
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
                 )
             }
         }
@@ -631,6 +677,42 @@ fun LyricsOverlayPreview() {
                 onSearchOnline = {},
                 onTogglePlayback = {}
             )
+        }
+    }
+}
+
+@PreviewDynamicColors
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    device = Devices.PIXEL_5,
+    showBackground = true
+)
+@Composable
+fun UnsyncedLyricsListPreview() {
+    val lines = listOf(
+        "Holding my breath against the cold",
+        "Waiting for the morning to call",
+        "But there's a fire in my chest",
+        "Burning brighter than before",
+        "",
+        "I will rise above the noise",
+        "And walk straight through the open door",
+        "No more hiding, no more fear",
+        "Let the silence break apart"
+    ).map { text -> LyricsLine(time = 0L, text = text) }
+
+    val state = LyricsUiState(
+        lines = lines,
+        synced = false,
+        exists = true,
+        currentLine = -1,
+        copyright = "Lyrics licensed & provided by LyricFind",
+        trackHash = "trackHash123"
+    )
+
+    SwingMusicTheme(dynamicColor = true) {
+        Surface {
+            UnsyncedLyricsList(state = state)
         }
     }
 }
