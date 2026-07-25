@@ -21,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -82,7 +81,7 @@ fun ArtistItem(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, wallpaper = Wallpapers.BLUE_DOMINATED_EXAMPLE)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun ArtistItemPreview() {
     fun generateDummyArtist(): Artist {

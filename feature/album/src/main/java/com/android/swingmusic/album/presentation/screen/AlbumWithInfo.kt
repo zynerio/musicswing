@@ -12,7 +12,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -72,7 +71,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -126,9 +124,8 @@ fun AlbumWithInfo(
     onGetSheetAction: (track: Track, sheetAction: BottomSheetAction) -> Unit,
     onGotoArtist: (hash: String) -> Unit,
 ) {
-    val isDarkTheme = isSystemInDarkTheme()
-    val versionContainerColor = if (isDarkTheme) Color(0x26DACC32) else Color(0x3D744F00)
-    val versionTextColor = if (isDarkTheme) Color(0xFFDACC32) else Color(0xFF744E00)
+    val versionContainerColor = Color(0x26DACC32)
+    val versionTextColor = Color(0xFFDACC32)
 
     val interaction = remember { MutableInteractionSource() }
     val listState = rememberLazyListState()
@@ -897,7 +894,6 @@ private fun Int.formattedTrackCount(): String {
 
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    wallpaper = Wallpapers.RED_DOMINATED_EXAMPLE,
 )
 @Composable
 fun AlbumWithInfoScreenPreview() {

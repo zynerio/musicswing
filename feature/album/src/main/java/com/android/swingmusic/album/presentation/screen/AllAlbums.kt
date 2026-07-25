@@ -65,7 +65,6 @@ import com.android.swingmusic.core.domain.model.Album
 import com.android.swingmusic.core.domain.util.SortBy
 import com.android.swingmusic.uicomponent.presentation.component.AlbumItem
 import com.android.swingmusic.uicomponent.presentation.component.SortByChip
-import com.android.swingmusic.uicomponent.presentation.theme.SwingMusicTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.android.swingmusic.uicomponent.R as UiComponents
 
@@ -341,46 +340,44 @@ fun AllAlbumScreen(
         showOnRefreshIndicator = false
     }
 
-    SwingMusicTheme(navBarColor = MaterialTheme.colorScheme.inverseOnSurface) {
-        PullToRefreshBox(
-            isRefreshing = showOnRefreshIndicator,
-            state = refreshState,
-            onRefresh = {
-                showOnRefreshIndicator = true
+    PullToRefreshBox(
+        isRefreshing = showOnRefreshIndicator,
+        state = refreshState,
+        onRefresh = {
+            showOnRefreshIndicator = true
 
-                allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnPullToRefresh)
-            },
-            indicator = {
-                PullToRefreshDefaults.Indicator(
-                    modifier = Modifier
-                        .padding(top = 76.dp)
-                        .align(Alignment.TopCenter),
-                    isRefreshing = showOnRefreshIndicator,
-                    state = refreshState
-                )
-            }
-        ) {
-            AllAlbums(
-                pagingAlbums = pagingAlbums,
-                allAlbumsUiState = albumsUiState,
-                sortByPairs = sortAlbumsByPairs,
-                baseUrl = baseUrl ?: "https://default",
-                showOnRefreshIndicator = showOnRefreshIndicator,
-                onUpdateGridCount = { gridCount ->
-                    allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnUpdateGridCount(gridCount))
-                },
-                onSortBy = { pair ->
-                    allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnSortBy(pair))
-                },
-                onClickAlbumItem = {
-                    albumWithInfoViewModel.onAlbumWithInfoUiEvent(AlbumWithInfoUiEvent.ResetState)
-                    albumNavigator.gotoAlbumWithInfo(albumHash = it)
-                },
-                onRetry = {
-                    allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnRetry)
-                }
+            allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnPullToRefresh)
+        },
+        indicator = {
+            PullToRefreshDefaults.Indicator(
+                modifier = Modifier
+                    .padding(top = 76.dp)
+                    .align(Alignment.TopCenter),
+                isRefreshing = showOnRefreshIndicator,
+                state = refreshState
             )
         }
+    ) {
+        AllAlbums(
+            pagingAlbums = pagingAlbums,
+            allAlbumsUiState = albumsUiState,
+            sortByPairs = sortAlbumsByPairs,
+            baseUrl = baseUrl ?: "https://default",
+            showOnRefreshIndicator = showOnRefreshIndicator,
+            onUpdateGridCount = { gridCount ->
+                allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnUpdateGridCount(gridCount))
+            },
+            onSortBy = { pair ->
+                allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnSortBy(pair))
+            },
+            onClickAlbumItem = {
+                albumWithInfoViewModel.onAlbumWithInfoUiEvent(AlbumWithInfoUiEvent.ResetState)
+                albumNavigator.gotoAlbumWithInfo(albumHash = it)
+            },
+            onRetry = {
+                allAlbumsViewModel.onAlbumsUiEvent(AlbumsUiEvent.OnRetry)
+            }
+        )
     }
 }
 

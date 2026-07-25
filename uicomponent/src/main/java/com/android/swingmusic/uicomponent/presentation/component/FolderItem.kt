@@ -33,7 +33,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.android.swingmusic.core.domain.model.Folder
 import com.android.swingmusic.uicomponent.R
@@ -170,7 +169,6 @@ private fun Int.getFolderHelperText(): String {
     showBackground = true,
     device = Devices.PIXEL_6,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    wallpaper = Wallpapers.RED_DOMINATED_EXAMPLE
 )
 @Composable
 fun FolderItemPreview() {

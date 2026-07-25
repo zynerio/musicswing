@@ -57,7 +57,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.android.swingmusic.auth.presentation.event.AuthUiEvent
 import com.android.swingmusic.auth.presentation.state.AuthState
@@ -383,7 +382,6 @@ fun LoginWithUsernameScreen(
 
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    wallpaper = Wallpapers.RED_DOMINATED_EXAMPLE
 )
 @Composable
 fun LoginWithUsernamePreview() {

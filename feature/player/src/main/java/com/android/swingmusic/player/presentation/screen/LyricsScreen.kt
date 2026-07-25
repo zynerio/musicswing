@@ -662,7 +662,7 @@ fun LyricsOverlayPreview() {
     )
 
 
-    SwingMusicTheme(dynamicColor = true) {
+    SwingMusicTheme {
         Surface() {
             LyricsOverlayContent(
                 track = track,
@@ -710,7 +710,7 @@ fun UnsyncedLyricsListPreview() {
         trackHash = "trackHash123"
     )
 
-    SwingMusicTheme(dynamicColor = true) {
+    SwingMusicTheme {
         Surface {
             UnsyncedLyricsList(state = state)
         }

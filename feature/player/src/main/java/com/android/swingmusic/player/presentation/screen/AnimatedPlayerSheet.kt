@@ -28,7 +28,6 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -554,18 +553,10 @@ private fun AnimatedSheetContent(
         }
     }
 
-    val isDarkTheme = isSystemInDarkTheme()
-    val inverseOnSurface = MaterialTheme.colorScheme.inverseOnSurface
-    val onSurface = MaterialTheme.colorScheme.onSurface
-    val fileTypeBadgeColor = when (track.bitrate) {
-        in 321..1023 -> if (isDarkTheme) Color(0xFF172B2E) else Color(0xFFAEFAF4)
-        in 1024..Int.MAX_VALUE -> if (isDarkTheme) Color(0XFF443E30) else Color(0xFFFFFBCC)
-        else -> inverseOnSurface
-    }
     val fileTypeTextColor = when (track.bitrate) {
-        in 321..1023 -> if (isDarkTheme) Color(0XFF33FFEE) else Color(0xFF172B2E)
-        in 1024..Int.MAX_VALUE -> if (isDarkTheme) Color(0XFFEFE143) else Color(0xFF221700)
-        else -> onSurface
+        in 321..1023 -> Color(0XFF33FFEE)
+        in 1024..Int.MAX_VALUE -> Color(0XFFEFE143)
+        else -> MaterialTheme.colorScheme.onSurface
     }
 
     val animateWave = playbackState == PlaybackState.PLAYING && !isBuffering
@@ -1243,10 +1234,7 @@ private fun AnimatedSheetContent(
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(24))
-                                    .background(
-                                        if (isDarkTheme) fileTypeTextColor.copy(alpha = .075f)
-                                        else fileTypeBadgeColor
-                                    )
+                                    .background(fileTypeTextColor.copy(alpha = .075f))
                                     .wrapContentSize()
                                     .padding(8.dp)
                             ) {

@@ -1,120 +1,73 @@
 package com.android.swingmusic.uicomponent.presentation.theme
 
-import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 
-private val lightColorScheme = lightColorScheme(
-    primary = light_primary,
-    onPrimary = light_onPrimary,
-    primaryContainer = light_primaryContainer,
-    onPrimaryContainer = light_onPrimaryContainer,
-    secondary = light_secondary,
-    onSecondary = light_onSecondary,
-    secondaryContainer = light_secondaryContainer,
-    onSecondaryContainer = light_onSecondaryContainer,
-    tertiary = light_tertiary,
-    onTertiary = light_onTertiary,
-    tertiaryContainer = light_tertiaryContainer,
-    onTertiaryContainer = light_onTertiaryContainer,
-    error = light_error,
-    errorContainer = light_errorContainer,
-    onError = light_onError,
-    onErrorContainer = light_onErrorContainer,
-    background = light_background,
-    onBackground = light_onBackground,
-    surface = light_surface,
-    onSurface = light_onSurface,
-    surfaceVariant = light_surfaceVariant,
-    onSurfaceVariant = light_onSurfaceVariant,
-    outline = light_outline,
-    inverseOnSurface = light_inverseOnSurface,
-    inverseSurface = light_inverseSurface,
-    inversePrimary = light_inversePrimary,
-    surfaceTint = light_surfaceTint,
-    outlineVariant = light_outlineVariant,
-    scrim = light_scrim,
-)
-
-private val darkColorScheme = darkColorScheme(
-    primary = dark_primary,
-    onPrimary = dark_onPrimary,
-    primaryContainer = dark_primaryContainer,
-    onPrimaryContainer = dark_onPrimaryContainer,
-    secondary = dark_secondary,
-    onSecondary = dark_onSecondary,
-    secondaryContainer = dark_secondaryContainer,
-    onSecondaryContainer = dark_onSecondaryContainer,
-    tertiary = dark_tertiary,
-    onTertiary = dark_onTertiary,
-    tertiaryContainer = dark_tertiaryContainer,
-    onTertiaryContainer = dark_onTertiaryContainer,
-    error = dark_error,
-    errorContainer = dark_errorContainer,
-    onError = dark_onError,
-    onErrorContainer = dark_onErrorContainer,
-    background = dark_background,
-    onBackground = dark_onBackground,
-    surface = dark_surface,
-    onSurface = dark_onSurface,
-    surfaceVariant = dark_surfaceVariant,
-    onSurfaceVariant = dark_onSurfaceVariant,
-    outline = dark_outline,
-    inverseOnSurface = dark_inverseOnSurface,
-    inverseSurface = dark_inverseSurface,
-    inversePrimary = dark_inversePrimary,
-    surfaceTint = dark_surfaceTint,
-    outlineVariant = dark_outlineVariant,
-    scrim = dark_scrim,
+private val blackColorScheme = darkColorScheme(
+    primary = neutral200,
+    onPrimary = neutral900,
+    primaryContainer = neutral800,
+    onPrimaryContainer = neutral50,
+    secondary = neutral300,
+    onSecondary = neutral900,
+    secondaryContainer = neutral800,
+    onSecondaryContainer = neutral50,
+    tertiary = neutral200,
+    onTertiary = neutral900,
+    tertiaryContainer = neutral800,
+    onTertiaryContainer = neutral50,
+    error = destructive,
+    onError = neutral950,
+    errorContainer = destructiveContainer,
+    onErrorContainer = onDestructiveContainer,
+    background = neutral950,
+    onBackground = neutral50,
+    surface = neutral950,
+    onSurface = neutral50,
+    surfaceVariant = neutral800,
+    onSurfaceVariant = neutral400,
+    outline = borderWhite10,
+    outlineVariant = borderWhite10,
+    inverseSurface = neutral200,
+    inverseOnSurface = neutral900,
+    inversePrimary = neutral900,
+    surfaceTint = neutral200,
+    scrim = Color.Black,
+    surfaceContainerLowest = surfaceLowest,
+    surfaceContainerLow = surfaceLow,
+    surfaceContainer = neutral900,
+    surfaceContainerHigh = surfaceHigh,
+    surfaceContainerHighest = neutral800,
 )
 
 @Composable
 fun SwingMusicTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
     navBarColor: Color? = null,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> darkColorScheme
-        else -> lightColorScheme
-    }
-
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val activity = view.context as ComponentActivity
-            val effectiveNavBarColor = (navBarColor ?: colorScheme.inverseOnSurface).toArgb()
+            val effectiveNavBarColor =
+                (navBarColor ?: blackColorScheme.inverseOnSurface).toArgb()
             activity.enableEdgeToEdge(
-                navigationBarStyle = if (darkTheme) {
-                    SystemBarStyle.dark(effectiveNavBarColor)
-                } else {
-                    SystemBarStyle.light(effectiveNavBarColor, effectiveNavBarColor)
-                }
+                statusBarStyle = SystemBarStyle.dark(Color.Transparent.toArgb()),
+                navigationBarStyle = SystemBarStyle.dark(effectiveNavBarColor)
             )
         }
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = blackColorScheme,
         typography = Typography,
         content = content
     )
