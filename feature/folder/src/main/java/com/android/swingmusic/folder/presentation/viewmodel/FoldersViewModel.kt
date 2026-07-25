@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.android.swingmusic.auth.domain.repository.AuthRepository
 import com.android.swingmusic.core.data.util.Resource
 import com.android.swingmusic.core.domain.model.Folder
 import com.android.swingmusic.core.domain.model.FoldersAndTracks
@@ -27,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FoldersViewModel @Inject constructor(
     private val folderRepository: FolderRepository,
-    private val pLayerRepository: PLayerRepository
+    private val pLayerRepository: PLayerRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     val homeDir: Folder = Folder(
         path = "\$home",
@@ -83,7 +85,15 @@ class FoldersViewModel @Inject constructor(
         folderScrollPositions[normalizeFolderPath(path)]
 
     init {
-        getFoldersContentPaging(homeDir.path)
+        viewModelScope.launch {
+            // This VM is activity-scoped and may be created before login. Fetching without
+            // credentials would cache a Pager built with a null base URL/token that keeps
+            // failing after login. Skip instead: FoldersAndTracksScreen triggers the first
+            // fetch once the base URL becomes available.
+            if (authRepository.getAccessToken() != null && authRepository.getBaseUrl() != null) {
+                getFoldersContentPaging(homeDir.path)
+            }
+        }
     }
 
     fun resetNavPathsForGotoFolder(targetPath: String) {
