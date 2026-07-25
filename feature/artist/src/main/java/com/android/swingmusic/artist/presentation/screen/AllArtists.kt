@@ -64,7 +64,6 @@ import com.android.swingmusic.core.domain.model.Artist
 import com.android.swingmusic.core.domain.util.SortBy
 import com.android.swingmusic.uicomponent.presentation.component.ArtistItem
 import com.android.swingmusic.uicomponent.presentation.component.SortByChip
-import com.android.swingmusic.uicomponent.presentation.theme.SwingMusicTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.android.swingmusic.uicomponent.R as UiComponents
 
@@ -341,48 +340,46 @@ fun AllArtistsScreen(
         showOnRefreshIndicator = false
     }
 
-    SwingMusicTheme(navBarColor = MaterialTheme.colorScheme.inverseOnSurface) {
-        PullToRefreshBox(
-            isRefreshing = showOnRefreshIndicator,
-            state = refreshState,
-            onRefresh = {
-                showOnRefreshIndicator = true
+    PullToRefreshBox(
+        isRefreshing = showOnRefreshIndicator,
+        state = refreshState,
+        onRefresh = {
+            showOnRefreshIndicator = true
 
-                artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnPullToRefresh)
-            },
-            indicator = {
-                PullToRefreshDefaults.Indicator(
-                    modifier = Modifier
-                        .padding(top = 76.dp)
-                        .align(Alignment.TopCenter),
-                    isRefreshing = showOnRefreshIndicator,
-                    state = refreshState
-                )
-            }
-        ) {
-            AllArtists(
-                pagingArtists = pagingArtists,
-                artistsUiState = artistsUiState,
-                sortByPairs = sortByPairs,
-                baseUrl = baseUrl ?: "",
-                showOnRefreshIndicator = showOnRefreshIndicator,
-                onUpdateGridCount = { count ->
-                    artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnUpdateGridCount(count))
-                },
-                onSortBy = { pair ->
-                    artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnSortBy(pair))
-                },
-                onRetry = {
-                    artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnRetry)
-                },
-                onNavigateToInfo = {
-                    artistInfoViewModel.onArtistInfoUiEvent(
-                        ArtistInfoUiEvent.OnLoadArtistInfo(it)
-                    )
-                    navigator.gotoArtistInfo(it)
-                }
+            artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnPullToRefresh)
+        },
+        indicator = {
+            PullToRefreshDefaults.Indicator(
+                modifier = Modifier
+                    .padding(top = 76.dp)
+                    .align(Alignment.TopCenter),
+                isRefreshing = showOnRefreshIndicator,
+                state = refreshState
             )
         }
+    ) {
+        AllArtists(
+            pagingArtists = pagingArtists,
+            artistsUiState = artistsUiState,
+            sortByPairs = sortByPairs,
+            baseUrl = baseUrl ?: "",
+            showOnRefreshIndicator = showOnRefreshIndicator,
+            onUpdateGridCount = { count ->
+                artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnUpdateGridCount(count))
+            },
+            onSortBy = { pair ->
+                artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnSortBy(pair))
+            },
+            onRetry = {
+                artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnRetry)
+            },
+            onNavigateToInfo = {
+                artistInfoViewModel.onArtistInfoUiEvent(
+                    ArtistInfoUiEvent.OnLoadArtistInfo(it)
+                )
+                navigator.gotoArtistInfo(it)
+            }
+        )
     }
 }
 

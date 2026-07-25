@@ -10,7 +10,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +58,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers.RED_DOMINATED_EXAMPLE
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
@@ -129,18 +127,10 @@ private fun NowPlaying(
         }
     }
 
-    val isDarkTheme = isSystemInDarkTheme()
-    val inverseOnSurface = MaterialTheme.colorScheme.inverseOnSurface
-    val onSurface = MaterialTheme.colorScheme.onSurface
-    val fileTypeBadgeColor = when (track.bitrate) {
-        in 321..1023 -> if (isDarkTheme) Color(0xFF172B2E) else Color(0xFFAEFAF4)
-        in 1024..Int.MAX_VALUE -> if (isDarkTheme) Color(0XFF443E30) else Color(0xFFFFFBCC)
-        else -> inverseOnSurface
-    }
     val fileTypeTextColor = when (track.bitrate) {
-        in 321..1023 -> if (isDarkTheme) Color(0XFF33FFEE) else Color(0xFF172B2E)
-        in 1024..Int.MAX_VALUE -> if (isDarkTheme) Color(0XFFEFE143) else Color(0xFF221700)
-        else -> onSurface
+        in 321..1023 -> Color(0XFF33FFEE)
+        in 1024..Int.MAX_VALUE -> Color(0XFFEFE143)
+        else -> MaterialTheme.colorScheme.onSurface
     }
 
     val animateWave = playbackState == PlaybackState.PLAYING && isBuffering.not()
@@ -499,9 +489,7 @@ private fun NowPlaying(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(24))
-                    .background(
-                        if (isDarkTheme) fileTypeTextColor.copy(alpha = .075F) else fileTypeBadgeColor
-                    )
+                    .background(fileTypeTextColor.copy(alpha = .075F))
                     .wrapContentSize()
                     .padding(8.dp)
             ) {
@@ -690,7 +678,6 @@ fun NowPlayingScreen(
 
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    wallpaper = RED_DOMINATED_EXAMPLE,
     device = Devices.PIXEL_5
 )
 @Composable
