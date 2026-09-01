@@ -1,38 +1,13 @@
 <div align="center" style="display: flex; justify-content: center; align-items: center;">
-  <img class="lo" src='.github/images/logo-fill.light.svg' style="height: 4rem">
+
+<img width="150" height="150" alt="ms" src="https://github.com/user-attachments/assets/9e246182-8fe7-4fda-83fe-bcd93d53e2bf" />
 </div>
-<div align="center" style="font-size: 2rem"><b>Swing Music Android Client</b></div>
-
-<div align="center"><b><sub><code>v1.0.1</code></sub></b></div>
-
-**<div align="center" style="padding-top: 1.25rem">[Download](https://github.com/swingmx/android/releases) • <a href="https://github.com/sponsors/swingmx" target="_blank">Sponsor Us ❤️</a> • [Swing Music Docs](https://swingmx.com/guide/introduction.html) • [r/SwingMusicApp](https://www.reddit.com/r/SwingMusicApp)</div>**
-
-##
-
-![Image](.github/images/readme.webp)
-This client application allows you to stream music on your Android device from your Swing Music server.
-
-### Features
-
-Below is a list of the currently implemented features:
-
-- Folders view
-- Playback
-- Albums and Artist view
-- Search Tracks, Albums, Artists
-- Playlists can be viewed in the folder view by enabling the `Show Playlists in folder view` option in `Settings > Folders` in the webclient.
-
-More features will be implemented in the future.
-
-### How to use
-
-Download the app from the [releases page](https://github.com/swingmx/android/releases) and install the APK. When you launch the app, you should be prompted to scan a QR code or enter your server details manually.
-
-You can go to `Settings > Pair device` on the webclient to get the QR code.
+<h2><div align="center" style="font-size: 2rem"><b>Swing Music Android Client Alternative</b></div></h2>
+<div align="center" style="font-size: 2rem">New and improved player. Compatible with tablets, Chinese Android car radios, and mobile phones.
+</div>
+<p></p>
+<img width="1152" height="720" alt="Screenshot_20260901_201224" src="https://github.com/user-attachments/assets/29001c68-1afe-4e02-85b9-173c2cddd730" />
 
 
-<!-- [![wakatime](https://wakatime.com/badge/user/99206146-a1fc-4be5-adc8-c2351f27ecef/project/018e7aae-f9e9-42e9-99e1-fc381580884d.svg)](https://wakatime.com/badge/user/99206146-a1fc-4be5-adc8-c2351f27ecef/project/018e7aae-f9e9-42e9-99e1-fc381580884d) -->
 
-### License
-
-This software is provided to you with terms stated in the AGPLv3 License. Read the full text in the `LICENSE` file located at the root of this repository.
+<h1><div align="center">Coming soon</DIV></h1>
